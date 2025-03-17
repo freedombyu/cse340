@@ -1,56 +1,52 @@
-/* Mobile-First Styles */
-body {
-  font-family: Arial, sans-serif;
+*, *:before, *:after {
   margin: 0;
   padding: 0;
-  background-color: #f8f8f8;
-  color: #333;
+  box-sizing: border-box;
 }
-
-.home-container {
-  text-align: center;
-  padding: 20px;
+nav ul, #hero-features {
+  list-style: none;
 }
-
-.hero img {
-  width: 100%;
-  max-height: 300px;
-  object-fit: cover;
+section {
+  padding: 1rem;
 }
-
-.hero h1 {
+a {
+  text-decoration: none;
+  color: black;
+}
+.site-name {
   font-size: 2rem;
-  margin: 10px 0;
 }
-
-.features {
+#top-header {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
 }
-
-.feature img {
-  width: 100%;
-  height: auto;
-  border-radius: 10px;
+nav {
+  background-color: black;
 }
-
-.feature h2 {
-  font-size: 1.5rem;
+nav a {
+  color: whitesmoke;
 }
-
-/* Large Screen (Desktop) Styles */
-@media screen and (min-width: 768px) {
-  .features {
-      flex-direction: row;
-      justify-content: center;
-  }
-
-  .feature {
-      width: 45%;
-  }
-
-  .hero h1 {
-      font-size: 2.5rem;
-  }
+nav ul {
+  display: flex;
+}
+nav ul li {
+  flex-grow: 1;
+  display: flex;
+}
+nav ul li a {
+  padding: 0.7rem;
+  text-align: center;
+  flex-grow: 1;
+}
+nav ul li a:hover {
+  background-color: lightgray;
+  color: black;
+}
+footer {
+  background-color: black;
+  color: whitesmoke;
+  padding: 1rem;
+  text-align: center;
 }
