@@ -3,8 +3,13 @@
     background-image: url('/images/site/small_check.jpg');
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
+    background-repeat: repeat;
   }
+
+  html, body {
+    height: 100%;
+  }
+  
 
   #wrapper {
     background-color: white;
