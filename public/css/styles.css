@@ -59,7 +59,7 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-  background-color: lightgray;
+  background-color: rgb(64, 86, 182);
   color: black;
 }
 
@@ -131,7 +131,7 @@ nav ul li a:hover {
 }
 
 #upgrades-container .card {
-  border: 1px solid lightgray;
+  border: 1px solid rgb(211, 211, 211);
   margin: 0.5rem;
   padding: 1rem;
   border-radius: 5px;
