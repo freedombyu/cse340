@@ -2,6 +2,8 @@
  * This server.js file is the primary file of the
  * application. It is used to control the project.
  *******************************************/
+const baseController = require("./controllers/baseController")
+
 /* ***********************
  * Require Statements
  *************************/
@@ -27,22 +29,22 @@ app.set('layout', './layouts/layout'); // not at views root
 app.use(static);
 
 // Index route
-app.get('/', handleErrors(buildHome));
+app.get('/', baseController.buildHome);
 // Inventory Routes
 app.use('/inv', inventoryRouter);
 
-/* ***********************
+/* *************************************
  * Route Not Found
  * Must be keep after all other routes
- *************************/
+ **************************************/
 app.use(async (req, res, next) => {
   next({ status: 404, message: "Sorry, it seems that page doesn't exists!" });
 });
 
-/* ***********************
+/* *****************************************
  * Express Error Handler
  * Must be keep after all other middleware
- *************************/
+ *******************************************/
 app.use(async (err, req, res, next) => {
   const nav = await getNav();
   let message = '';

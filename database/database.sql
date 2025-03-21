@@ -231,3 +231,22 @@ VALUES   (
     'White',
     5
   );
+-- Query 6
+SELECT inv_image,
+  inv_thumbnail
+FROM inventory;
+UPDATE inventory
+SET inv_image = REPLACE(inv_image, 'images/', 'images/vehicles/'),
+  inv_thumbnail = REPLACE(inv_thumbnail, 'images/', 'images/vehicles/');
+
+  -- Query 4
+SELECT *
+FROM public.inventory
+WHERE inv_model = 'Hummer';
+UPDATE inventory
+SET inv_description = REPLACE(
+    inv_description,
+    'small interior',
+    'huge interior'
+  )
+WHERE inv_model = 'Hummer';
