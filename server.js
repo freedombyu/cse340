@@ -1,3 +1,6 @@
+// Add this to the top of your server.js with your other imports
+const inventoryRoute = require('./routes/inventoryRoute')
+
 /* ******************************************
  * This server.js file is the primary file of the
  * application. It is used to control the project.
@@ -74,3 +77,30 @@ const host = process.env.HOST;
 app.listen(port, () => {
   console.log(`app listening on ${host}:${port}`);
 });
+
+/* ***********************
+ * Error middleware
+ *************************/
+app.use(async (err, req, res, next) => {
+  let nav = await utilities.getNav()
+  console.error(`Error at: "${req.originalUrl}": ${err.message}`)
+  if(err.status == 404){ 
+    message = err.message
+  } else {
+    message = 'Oh no! There was a crash. Maybe try a different route?'
+  }
+  res.render("errors/error", {
+    title: err.status || 'Server Error',
+    message,
+    nav
+  })
+})
+
+// Import the error route
+const errorRoute = require('./routes/errorRoute')
+
+// Routes
+app.use("/", baseController.buildHome)
+app.use("/inv", inventoryRoute)
+// Add the error route
+app.use("/error", errorRoute)
