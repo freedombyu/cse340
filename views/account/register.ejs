@@ -14,6 +14,13 @@
       <p><%= messages().flash %></p>
     </div>
   <% } %>
+  <% if (errors) { %>
+    <ul class="notice">
+   <% errors.array().forEach(error => { %>
+     <li><%= error.msg %></li>
+  <%  }) %>
+   </ul>
+  <% } %>
 
   <form id="registerForm" action="/account/register" method="post">
     <div class="form-group">
@@ -34,14 +41,57 @@
         <input type="password" id="account_password" name="account_password" required>
         <span class="password-toggle" onclick="togglePassword('account_password', this)">
           <i class="fa fa-eye"></i>
-        </span>
+        </span>        
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="client_password" 
+               pattern="^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(.{12,})$" 
+               required>
+        <span class="password-requirements">Password must be minimum of 12 characters and include 1 capital letter, 1 number and 1 special character</span>
+        <span id="password-validation-message" class="validation-message"></span>
       </div>
     </div>
       <button type="submit" class="btn-primary">Register</button>
     </div>
   </form>
 </div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const passwordInput = document.getElementById('password');
+    const validationMessage = document.getElementById('password-validation-message');
+    
+    passwordInput.addEventListener('input', function() {
+      const password = passwordInput.value;
+      
+      // Check password requirements
+      const hasMinLength = password.length >= 12;
+      const hasCapital = /[A-Z]/.test(password);
+      const hasNumber = /[0-9]/.test(password);
+      const hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+      
+      if (!hasMinLength || !hasCapital || !hasNumber || !hasSpecial) {
+        validationMessage.textContent = 'Please ensure your password meets all requirements';
+        validationMessage.className = 'validation-message error';
+        passwordInput.setCustomValidity('Password does not meet requirements');
+      } else {
+        validationMessage.textContent = 'Password meets requirements';
+        validationMessage.className = 'validation-message success';
+        passwordInput.setCustomValidity('');
+      }
+    });
+    
+    // Also check on form submission
+    const form = document.getElementById('registerForm');
+    form.addEventListener('submit', function(event) {
+      if (!passwordInput.checkValidity()) {
+        event.preventDefault();
+        validationMessage.textContent = 'Please ensure your password meets all requirements';
+        validationMessage.className = 'validation-message error';
+      }
+    });
+  });
+</script>
 
-<script src="/js/password-toggle.js"></script>
 
 <%- include('../partials/footer') %>

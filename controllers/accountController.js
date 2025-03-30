@@ -25,7 +25,7 @@ async function buildRegister(req, res, next) {
   })
 }
 
-module.exports = { buildLogin, buildRegister }
+module.exports = { buildLogin, buildRegister, registerAccount }
 
 /* ****************************************
 *  Process Registration
