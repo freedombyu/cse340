@@ -1,23 +1,56 @@
-// Add this to the top of your server.js with your other imports
-const inventoryRoute = require('./routes/inventoryRoute')
-
 /* ******************************************
  * This server.js file is the primary file of the
  * application. It is used to control the project.
  *******************************************/
-const baseController = require("./controllers/baseController")
 
 /* ***********************
  * Require Statements
  *************************/
+const session = require("express-session")
+const pool = require('./database/')
+const accountRoute = require("./routes/accountRoute")
 require('dotenv').config();
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const app = express();
 const static = require('./routes/static');
-const { buildHome } = require('./controllers/baseController');
-const inventoryRouter = require('./routes/inventoryRoute');
-const { getNav, handleErrors } = require('./utilities');
+const baseController = require('./controllers/baseController');
+const inventoryRoute = require('./routes/inventoryRoute');
+const errorRoute = require('./routes/errorRoute');
+const { getNav } = require('./utilities');
+const bodyParser = require("body-parser")
+const cookieParser = require('cookie-parser');
+
+
+/* ***********************
+ * Middleware
+ * ************************/
+app.use(session({
+  store: new (require('connect-pg-simple')(session))({
+    createTableIfMissing: true,
+    pool,
+  }),
+  secret: process.env.SESSION_SECRET,
+  resave: true,
+  saveUninitialized: true,
+  name: 'sessionId',
+}))
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
+
+// Express Messages Middleware
+app.use(require('connect-flash')())
+app.use(function(req, res, next){
+  res.locals.messages = require('express-messages')(req, res)
+  next()
+})
+
+//process Registration Activey
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+// x-www-form-urlencoded
 
 /* ***********************
  * View Engine and Templates
@@ -34,7 +67,10 @@ app.use(static);
 // Index route
 app.get('/', baseController.buildHome);
 // Inventory Routes
-app.use('/inv', inventoryRouter);
+app.use('/inv', inventoryRoute);
+app.use("/account", accountRoute)
+// Error Route
+app.use('/error', errorRoute);
 
 /* *************************************
  * Route Not Found
@@ -77,30 +113,3 @@ const host = process.env.HOST;
 app.listen(port, () => {
   console.log(`app listening on ${host}:${port}`);
 });
-
-/* ***********************
- * Error middleware
- *************************/
-app.use(async (err, req, res, next) => {
-  let nav = await utilities.getNav()
-  console.error(`Error at: "${req.originalUrl}": ${err.message}`)
-  if(err.status == 404){ 
-    message = err.message
-  } else {
-    message = 'Oh no! There was a crash. Maybe try a different route?'
-  }
-  res.render("errors/error", {
-    title: err.status || 'Server Error',
-    message,
-    nav
-  })
-})
-
-// Import the error route
-const errorRoute = require('./routes/errorRoute')
-
-// Routes
-app.use("/", baseController.buildHome)
-app.use("/inv", inventoryRoute)
-// Add the error route
-app.use("/error", errorRoute)

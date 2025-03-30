@@ -1,0 +1,47 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<%- include('../partials/navigation') %>
+
+<div class="form-container">
+  <% if (title) { %>
+    <h1><%= title %></h1>
+  <% } else { %>
+    <h1>Register</h1>
+  <% } %>
+
+  <% if (messages() && messages().flash) { %>
+    <div class="flash-message">
+      <p><%= messages().flash %></p>
+    </div>
+  <% } %>
+
+  <form id="registerForm" action="/account/register" method="post">
+    <div class="form-group">
+      <label for="firstname">First name</label>
+      <input type="text" id="firstname" name="client_firstname" required>
+    </div>
+    <div class="form-group">
+      <label for="lastname">Last name</label>
+      <input type="text" id="lastname" name="client_lastname" required>
+    </div>
+    <div class="form-group">
+      <label for="email">Email address</label>
+      <input type="email" id="email" name="client_email" required>
+    </div>
+    <div class="form-group password-container">
+      <label for="account_password">Password:</label>
+      <div class="password-input-wrapper">
+        <input type="password" id="account_password" name="account_password" required>
+        <span class="password-toggle" onclick="togglePassword('account_password', this)">
+          <i class="fa fa-eye"></i>
+        </span>
+      </div>
+    </div>
+      <button type="submit" class="btn-primary">Register</button>
+    </div>
+  </form>
+</div>
+
+<script src="/js/password-toggle.js"></script>
+
+<%- include('../partials/footer') %>

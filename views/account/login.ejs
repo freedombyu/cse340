@@ -1,0 +1,38 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<%- include('../partials/navigation') %>
+
+<div class="container">
+  <h1><%= title %></h1>
+
+  <% if (messages() && messages().length > 0) { %>
+    <div class="flash-message">
+      <% messages().forEach(function (message) { %>
+        <p><%= message %></p>
+      <% }) %>
+    </div>
+  <% } %>
+
+  <form action="/account/login" method="post" class="login-form">
+    <div class="form-group">
+      <label for="account_email">Email:</label>
+      <input type="email" id="account_email" name="account_email" required>
+    </div>
+    <div class="form-group password-container">
+      <label for="account_password">Password:</label>
+      <div class="password-input-wrapper">
+        <input type="password" id="account_password" name="account_password" required>
+        <span class="password-toggle" onclick="togglePassword('account_password', this)">
+          <i class="fa fa-eye"></i>
+        </span>
+      </div>
+    </div>
+    <button type="submit">Login</button>
+  </form>
+
+  <p class="register-link">No account? <a href="/account/register">Register here</a></p>
+</div>
+
+<script src="/js/password-toggle.js"></script>
+
+<%- include('../partials/footer') %>
