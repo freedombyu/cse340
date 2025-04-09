@@ -1,0 +1,23 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<%- include('../partials/navigation') %>
+
+<div class="management-container">
+  <h1><%= title %></h1>
+
+  <% if (message) { %>
+    <p class="notice <%= message.type %>"><%= message.message %></p>
+  <% } %>
+
+  <div class="management-options">
+    <h2>Inventory Management</h2>
+    <p>Welcome to the vehicle inventory management section. Select an option below:</p>
+    
+    <div class="management-links">
+      <a href="/inv/add-classification" class="management-link">Add New Classification</a>
+      <a href="/inv/add" class="management-link">Add New Vehicle</a>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
