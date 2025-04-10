@@ -125,4 +125,10 @@ Util.buildClassificationList = async function (classification_id = null) {
   return classificationList
 }
 
+// In utilities/index.js or similar
+const handleLogout = (req, res) => {
+  res.clearCookie("jwt");
+  return res.redirect("/");
+};
+
 module.exports = Util

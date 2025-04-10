@@ -36,30 +36,44 @@
       <input type="email" id="email" name="client_email" required>
     </div>
     <div class="form-group password-container">
-      <label for="account_password">Password:</label>
+      <label for="password">Password</label>
       <div class="password-input-wrapper">
-        <input type="password" id="account_password" name="account_password" required>
-        <span class="password-toggle" onclick="togglePassword('account_password', this)">
-          <i class="fa fa-eye"></i>
-        </span>        
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
         <input type="password" id="password" name="client_password" 
                pattern="^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(.{12,})$" 
                required>
-        <span class="password-requirements">Password must be minimum of 12 characters and include 1 capital letter, 1 number and 1 special character</span>
-        <span id="password-validation-message" class="validation-message"></span>
+        <span class="password-toggle" onclick="togglePassword()">
+          <i class="fa fa-eye"></i>
+        </span>
       </div>
+      <span class="password-requirements">Password must be minimum of 12 characters and include 1 capital letter, 1 number and 1 special character</span>
+      <span id="password-validation-message" class="validation-message"></span>
     </div>
+    <div>
       <button type="submit" class="btn-primary">Register</button>
     </div>
   </form>
 </div>
+
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const passwordInput = document.getElementById('password');
     const validationMessage = document.getElementById('password-validation-message');
+    
+    // Function to toggle password visibility
+    window.togglePassword = function() {
+      const passwordField = document.getElementById('password');
+      const icon = document.querySelector('.password-toggle i');
+      
+      if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        passwordField.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    };
     
     passwordInput.addEventListener('input', function() {
       const password = passwordInput.value;
@@ -92,6 +106,5 @@
     });
   });
 </script>
-
 
 <%- include('../partials/footer') %>

@@ -11,8 +11,6 @@ async function buildLogin(req, res, next) {
   })
 }
 
-module.exports = { buildLogin }
-
 /* ****************************************
 *  Deliver registration view
 * *************************************** */
@@ -59,3 +57,90 @@ async function registerAccount(req, res) {
     })
   }
 }
+
+const buildAccountUpdate = async (req, res, next) => {
+  try {
+    const account_id = parseInt(req.params.account_id);
+    const accountData = await accountModel.getAccountById(account_id);
+    res.render("account/update", {
+      title: "Update Account",
+      nav,
+      errors: null,
+      accountData,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateAccount = async (req, res, next) => {
+  try {
+    const { account_firstname, account_lastname, account_email, account_id } = req.body;
+    const updateResult = await accountModel.updateAccount(
+      account_firstname,
+      account_lastname,
+      account_email,
+      account_id
+    );
+
+    if (updateResult) {
+      // Get updated account data
+      const accountData = await accountModel.getAccountById(account_id);
+      req.flash("notice", "Account updated successfully");
+      res.locals.accountData = accountData;
+      return res.render("account/management", {
+        title: "Account Management",
+        nav,
+        errors: null,
+        accountData,
+      });
+    } else {
+      req.flash("notice", "Failed to update account");
+      const accountData = await accountModel.getAccountById(account_id);
+      return res.render("account/update", {
+        title: "Update Account",
+        nav,
+        errors: null,
+        accountData,
+        account_firstname,
+        account_lastname,
+        account_email,
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updatePassword = async (req, res, next) => {
+  try {
+    const { account_password, account_id } = req.body;
+    // Hash the password
+    const hashedPassword = await bcrypt.hashSync(account_password, 10);
+    const updateResult = await accountModel.updatePassword(hashedPassword, account_id);
+
+    if (updateResult) {
+      const accountData = await accountModel.getAccountById(account_id);
+      req.flash("notice", "Password updated successfully");
+      return res.render("account/management", {
+        title: "Account Management",
+        nav,
+        errors: null,
+        accountData,
+      });
+    } else {
+      req.flash("notice", "Failed to update password");
+      const accountData = await accountModel.getAccountById(account_id);
+      return res.render("account/update", {
+        title: "Update Account",
+        nav,
+        errors: null,
+        accountData,
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { buildLogin }

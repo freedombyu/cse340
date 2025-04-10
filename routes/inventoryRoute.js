@@ -5,6 +5,12 @@ const invController = require("../controllers/invController")
 const invValidate = require("../utilities/inventory-validation")
 const utilities = require("../utilities")
 
+const { checkInventoryAuth } = require("../middleware/auth");
+
+// Apply middleware only to administrative routes
+router.get("/add-classification", checkInventoryAuth, invController.buildAddClassification);
+router.post("/add-classification", checkInventoryAuth, invController.addClassification);
+
 // Route to build inventory by classification view
 router.get("/type/:classificationId", invController.buildByClassificationId)
 
