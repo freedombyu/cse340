@@ -6,7 +6,7 @@ baseController.buildHome = async function(req, res){
   res.render("index", {title: "Home", nav})
 }
 
-invCont.buildManagement = async function (req, res, next) {
+exports.buildManagement = async function (req, res, next) {
   console.log("buildManagement function called")
   try {
     let nav = await utilities.getNav()

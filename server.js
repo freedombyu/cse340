@@ -66,7 +66,7 @@ app.use('/inv', inventoryRoute);
 app.use("/account", accountRoute)
 // Error Route
 app.use('/error', errorRoute);
-
+const invRoute = require("./routes/inventoryRoute");  // or the correct path to your inventory routes
 /* *************************************
  * Route Not Found
  * Must be keep after all other routes

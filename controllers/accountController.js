@@ -143,7 +143,7 @@ const updatePassword = async (req, res, next) => {
   }
 };
 
-invCont.buildManagement = async function (req, res, next) {
+module.exports.buildManagement = async function (req, res, next) {
   console.log("buildManagement function called")
   try {
     let nav = await utilities.getNav()
