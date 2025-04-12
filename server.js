@@ -59,6 +59,13 @@ app.set('layout', './layouts/layout'); // not at views root
  *************************/
 app.use(static);
 
+
+// Make sure the path is correct - if the file is named something different, adjust accordingly
+const invRouter = require("./routes/inventoryRoute")
+
+// Add this line to mount the router at the /inv path
+app.use("/inv", invRouter)
+
 // Index route
 app.get('/', baseController.buildHome);
 // Inventory Routes
