@@ -19,24 +19,25 @@ router.get("/", (req, res, next) => {
 })
 
 // Route to build add classification view (combine with middleware)
-router.get("/add-classification", checkInventoryAuth, utilities.handleErrors(invController.buildAddClassification))
-
+// router.get("/add-classification", checkInventoryAuth, utilities.handleErrors(invController.buildAddClassification))
+router.get("/add-classification", utilities.handleErrors(invController.buildAddClassification))
 // Route to process the add classification form
 router.post(
   "/add-classification",
-  checkInventoryAuth,
+  // checkInventoryAuth,
   invValidate.classificationRules(),
   invValidate.checkClassificationData,
   utilities.handleErrors(invController.addClassification)
 )
 
 // Route to build add inventory view
-router.get("/add", checkInventoryAuth, utilities.handleErrors(invController.buildAddInventory))
+// router.get("/add", checkInventoryAuth, utilities.handleErrors(invController.buildAddInventory))
+router.get("/add", utilities.handleErrors(invController.buildAddInventory))
 
 // Route to process the add inventory form
 router.post(
   "/add",
-  checkInventoryAuth,
+  // checkInventoryAuth,
   invValidate.inventoryRules(),
   invValidate.checkInventoryData,
   utilities.handleErrors(invController.addInventoryItem)
