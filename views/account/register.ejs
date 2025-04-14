@@ -38,9 +38,7 @@
     <div class="form-group password-container">
       <label for="password">Password</label>
       <div class="password-input-wrapper">
-        <input type="password" id="password" name="client_password" 
-               pattern="^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(.{12,})$" 
-               required>
+        <input type="password" id="password" name="client_password" required>
         <span class="password-toggle" onclick="togglePassword()">
           <i class="fa fa-eye"></i>
         </span>
@@ -75,6 +73,7 @@
       }
     };
     
+    // Validate password as user types
     passwordInput.addEventListener('input', function() {
       const password = passwordInput.value;
       
@@ -82,23 +81,34 @@
       const hasMinLength = password.length >= 12;
       const hasCapital = /[A-Z]/.test(password);
       const hasNumber = /[0-9]/.test(password);
-      const hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+      const hasSpecial = /[!@#$%^&*]/.test(password);
       
       if (!hasMinLength || !hasCapital || !hasNumber || !hasSpecial) {
-        validationMessage.textContent = 'Please ensure your password meets all requirements';
+        let missing = [];
+        if (!hasMinLength) missing.push('minimum 12 characters');
+        if (!hasCapital) missing.push('capital letter');
+        if (!hasNumber) missing.push('number');
+        if (!hasSpecial) missing.push('special character');
+        
+        validationMessage.textContent = 'Missing: ' + missing.join(', ');
         validationMessage.className = 'validation-message error';
-        passwordInput.setCustomValidity('Password does not meet requirements');
       } else {
         validationMessage.textContent = 'Password meets requirements';
         validationMessage.className = 'validation-message success';
-        passwordInput.setCustomValidity('');
       }
     });
     
     // Also check on form submission
-    const form = document.getElementById('registerForm');
-    form.addEventListener('submit', function(event) {
-      if (!passwordInput.checkValidity()) {
+    document.getElementById('registerForm').addEventListener('submit', function(event) {
+      const password = passwordInput.value;
+      
+      // Check password requirements
+      const hasMinLength = password.length >= 12;
+      const hasCapital = /[A-Z]/.test(password);
+      const hasNumber = /[0-9]/.test(password);
+      const hasSpecial = /[!@#$%^&*]/.test(password);
+      
+      if (!hasMinLength || !hasCapital || !hasNumber || !hasSpecial) {
         event.preventDefault();
         validationMessage.textContent = 'Please ensure your password meets all requirements';
         validationMessage.className = 'validation-message error';

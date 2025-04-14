@@ -4,6 +4,16 @@ require("dotenv").config()
 
 const Util = {}
 
+// Add this to utilities/index.js or a separate middleware file
+function checkLogin(req, res, next) {
+  if (req.session.loggedin) {
+    next()
+  } else {
+    req.flash("notice", "Please log in.")
+    return res.redirect("/account/login")
+  }
+}
+
 /* ************************
  * Constructs the nav HTML
  ************************** */
