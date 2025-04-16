@@ -1,83 +1,93 @@
-<%- include('../partials/head') %>
-<%- include('../partials/header') %>
-<%- include('../partials/navigation') %>
+<main>
+  <div class="add-inventory-container">
+    <h1>Add New Inventory Item</h1>
 
-<div class="form-container">
-  <% if (title) { %>
-    <h1><%= title %></h1>
-  <% } %>
+    <% if (messages) { %>
+      <% if (messages.notice) { %>
+        <div class="notice success-message"><%= messages.notice %></div>
+      <% } %>
+      <% if (messages.error) { %>
+        <div class="notice error-message"><%= messages.error %></div>
+      <% } %>
+    <% } %>
 
-  <% if (message) { %>
-    <p class="notice <%= message.type %>"><%= message.message %></p>
-  <% } %>
+    <form id="addInventoryForm" action="/inv/add-inventory" method="post">
+      <fieldset>
+        <legend>Add New Vehicle to Inventory</legend>
+        
+        <div class="form-group">
+          <label for="classification_id">Classification:</label>
+          <%- classificationList %>
+          <span class="error" id="classificationError"></span>
+        </div>
+        
+        <div class="form-group">
+          <label for="inv_make">Make:</label>
+          <input type="text" id="inv_make" name="inv_make" required
+                 value="<%= locals.inv && inv.inv_make ? inv.inv_make : '' %>">
+          <span class="error" id="makeError"></span>
+        </div>
+        
+        <div class="form-group">
+          <label for="inv_model">Model:</label>
+          <input type="text" id="inv_model" name="inv_model" required
+                 value="<%= locals.inv && inv.inv_model ? inv.inv_model : '' %>">
+          <span class="error" id="modelError"></span>
+        </div>
+        
+        <div class="form-group">
+          <label for="inv_description">Description:</label>
+          <textarea id="inv_description" name="inv_description" required><%= locals.inv && inv.inv_description ? inv.inv_description : '' %></textarea>
+          <span class="error" id="descriptionError"></span>
+        </div>
+        
+        <div class="form-group">
+          <label for="inv_image">Image Path:</label>
+          <input type="text" id="inv_image" name="inv_image" required
+                 value="<%= locals.inv && inv.inv_image ? inv.inv_image : '/images/vehicles/no-image.png' %>">
+          <span class="error" id="imageError"></span>
+        </div>
+        
+        <div class="form-group">
+          <label for="inv_thumbnail">Thumbnail Path:</label>
+          <input type="text" id="inv_thumbnail" name="inv_thumbnail" required
+                 value="<%= locals.inv && inv.inv_thumbnail ? inv.inv_thumbnail : '/images/vehicles/no-image-tn.png' %>">
+          <span class="error" id="thumbnailError"></span>
+        </div>
+        
+        <div class="form-group">
+          <label for="inv_price">Price:</label>
+          <input type="number" id="inv_price" name="inv_price" min="0" step="0.01" required
+                 value="<%= locals.inv && inv.inv_price ? inv.inv_price : '' %>">
+          <span class="error" id="priceError"></span>
+        </div>
+        
+        <div class="form-group">
+          <label for="inv_year">Year:</label>
+          <input type="number" id="inv_year" name="inv_year" min="1900" max="2099" required
+                 value="<%= locals.inv && inv.inv_year ? inv.inv_year : '' %>">
+          <span class="error" id="yearError"></span>
+        </div>
+        
+        <div class="form-group">
+          <label for="inv_miles">Mileage:</label>
+          <input type="number" id="inv_miles" name="inv_miles" min="0" required
+                 value="<%= locals.inv && inv.inv_miles ? inv.inv_miles : '' %>">
+          <span class="error" id="milesError"></span>
+        </div>
+        
+        <div class="form-group">
+          <label for="inv_color">Color:</label>
+          <input type="text" id="inv_color" name="inv_color" required
+                 value="<%= locals.inv && inv.inv_color ? inv.inv_color : '' %>">
+          <span class="error" id="colorError"></span>
+        </div>
+        
+        <div class="form-buttons">
+          <button type="submit">Add Vehicle</button>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</main>
 
-  <% if (errors) { %>
-    <ul class="notice error-list">
-    <% errors.forEach(error => { %>
-      <li><%= error.msg %></li>
-    <% }) %>
-    </ul>
-  <% } %>
-
-  <form id="addInventoryForm" action="/inv/add" method="post">
-    <fieldset>
-      <legend>Add New Vehicle</legend>
-
-      <div class="form-group">
-        <label for="inv_make">Make:</label>
-        <input type="text" id="inv_make" name="inv_make" required value="<%= locals.inv_make ? inv_make : '' %>">
-      </div>
-
-      <div class="form-group">
-        <label for="inv_model">Model:</label>
-        <input type="text" id="inv_model" name="inv_model" required value="<%= locals.inv_model ? inv_model : '' %>">
-      </div>
-
-      <div class="form-group">
-        <label for="inv_year">Year:</label>
-        <input type="number" id="inv_year" name="inv_year" required min="1900" max="2099" value="<%= locals.inv_year ? inv_year : '' %>">
-      </div>
-
-      <div class="form-group">
-        <label for="inv_description">Description:</label>
-        <textarea id="inv_description" name="inv_description" required><%= locals.inv_description ? inv_description : '' %></textarea>
-      </div>
-
-      <div class="form-group">
-        <label for="inv_image">Image Path:</label>
-        <input type="text" id="inv_image" name="inv_image" required value="<%= locals.inv_image ? inv_image : '/images/vehicles/no-image.png' %>">
-      </div>
-
-      <div class="form-group">
-        <label for="inv_thumbnail">Thumbnail Path:</label>
-        <input type="text" id="inv_thumbnail" name="inv_thumbnail" required value="<%= locals.inv_thumbnail ? inv_thumbnail : '/images/vehicles/no-image-tn.png' %>">
-      </div>
-
-      <div class="form-group">
-        <label for="inv_price">Price:</label>
-        <input type="number" id="inv_price" name="inv_price" required min="0" step="0.01" value="<%= locals.inv_price ? inv_price : '' %>">
-      </div>
-
-      <div class="form-group">
-        <label for="inv_miles">Miles:</label>
-        <input type="number" id="inv_miles" name="inv_miles" required min="0" value="<%= locals.inv_miles ? inv_miles : '' %>">
-      </div>
-
-      <div class="form-group">
-        <label for="inv_color">Color:</label>
-        <input type="text" id="inv_color" name="inv_color" required value="<%= locals.inv_color ? inv_color : '' %>">
-      </div>
-
-      <div class="form-group">
-        <label for="classification_id">Classification:</label>
-        <%- classificationList %>
-      </div>
-
-      <div class="form-group">
-        <button type="submit">Add Vehicle</button>
-      </div>
-    </fieldset>
-  </form>
-</div>
-
-<%- include('../partials/footer') %>
