@@ -2,6 +2,17 @@ const { body, validationResult } = require("express-validator")
 const accountModel = require("../models/account-model")
 const utilities = require("../utilities")
 
+const loginRules = [
+  body("account_email")
+    .isEmail()
+    .normalizeEmail()
+    .withMessage("A valid email is required."),
+  body("account_password")
+    .isLength({ min: 8 })
+    .withMessage("Password must be at least 8 characters."),
+];
+
+
 const validate = {}
 
 const registrationRules = [
@@ -144,4 +155,4 @@ validate.checkPasswordData = async (req, res, next) => {
 };
 
 
-module.exports = { validate, registrationRules };
+module.exports = { validate, loginRules, registrationRules };

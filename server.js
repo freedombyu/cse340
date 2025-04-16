@@ -60,6 +60,7 @@ app.set('layout', './layouts/layout'); // not at views root
 app.use(static);
 
 // Index route
+app.use("/account", require("./routes/accountRoute"));
 app.get('/', baseController.buildHome);
 // Inventory Routes
 app.use('/inv', inventoryRoute);

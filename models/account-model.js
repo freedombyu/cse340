@@ -4,72 +4,66 @@ const bcrypt = require('bcryptjs');
 /* *****************************
 *   Register new account
 * *************************** */
-async function registerAccount(client_firstname, client_lastname, client_email, client_password) {
+async function registerAccount(account_firstname, account_lastname, account_email, account_password) {
   try {
-    // Hash the password before storing
-    let hashedPassword
-    try {
-      // Regular password hashing
-      hashedPassword = await bcrypt.hashSync(client_password, 10)
-    } catch (error) {
-      console.error("Password hashing error:", error)
-      throw error
-    }
-    
-    const sql = `
-      INSERT INTO account 
-        (account_firstname, account_lastname, account_email, account_password)
-      VALUES 
-        ($1, $2, $3, $4)
-      RETURNING *
-    `
+    const sql = "INSERT INTO account (account_firstname, account_lastname, account_email, account_password, account_type) VALUES ($1, $2, $3, $4, 'Client') RETURNING *";
     return await pool.query(sql, [
-      client_firstname,
-      client_lastname,
-      client_email,
-      hashedPassword
-    ])
+      account_firstname,
+      account_lastname,
+      account_email,
+      account_password
+    ]);
   } catch (error) {
-    console.error("Error in registerAccount model function:", error.message)
-    return null
+    console.error("model error: " + error);
+    return null;
   }
 }
 
-/* **********************
+/* ****************************
  *   Check for existing email
- * ********************* */
-async function checkExistingEmail(client_email) {
+ * ************************** */
+async function checkExistingEmail(account_email) {
   try {
-    const sql = `
-      SELECT * FROM account 
-      WHERE account_email = $1
-    `
-    const email = await pool.query(sql, [client_email])
-    return email.rowCount
+    const sql = "SELECT * FROM account WHERE account_email = $1";
+    const email = await pool.query(sql, [account_email]);
+    return email.rowCount;
   } catch (error) {
-    console.error("Error in checkExistingEmail:", error.message)
-    throw error
+    console.error("Error in checkExistingEmail: " + error);
+    return 0;
   }
 }
 
 /* *****************************
-*   Get account by ID
-* *************************** */
-async function getAccountById(account_id) {
+* Return account data using email address
+* ***************************** */
+async function getAccountByEmail(account_email) {
   try {
-    const sql = `
-      SELECT account_id, account_firstname, account_lastname, account_email 
-      FROM account 
-      WHERE account_id = $1
-    `
-    const result = await pool.query(sql, [account_id])
-    return result.rows[0]
+    const result = await pool.query(
+      "SELECT * FROM account WHERE account_email = $1",
+      [account_email]
+    );
+    return result.rows[0];
   } catch (error) {
-    console.error("Error in getAccountById:", error.message)
-    throw error
+    console.error("Error in getAccountByEmail: " + error);
+    return null;
   }
 }
 
+/* *****************************
+* Return account data using account id
+* ***************************** */
+async function getAccountById(account_id) {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM account WHERE account_id = $1",
+      [account_id]
+    );
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error in getAccountById: " + error);
+    return null;
+  }
+}
 /* *****************************
 *   Update account information
 * *************************** */
@@ -116,6 +110,7 @@ module.exports = {
   registerAccount,
   checkExistingEmail,
   getAccountById,
+  getAccountByEmail,  
   updateAccount,
   updatePassword
 }
